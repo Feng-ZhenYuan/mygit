@@ -1,0 +1,126 @@
+#include<cstdio>
+#include<cstring>
+#include<stack>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+char s[110];
+int len;
+
+int init(int& a)
+{
+    int r = 0;
+    while(isdigit(s[a]))
+    {
+        r *= 10;
+        r += s[a]-'0';
+        a++;
+    }
+    return r;
+}
+
+int add(int& a)
+{
+    int r = 0;
+    stack<int> stk;
+    int status = 1;
+    int tmp;
+    bool flag = false;
+
+    while(a < len)
+    {
+        if(isdigit(s[a]))
+        {
+            if(!flag && status == 1)
+            {
+                stk.push(init(a));
+            }
+            else if(!flag && status == 2)
+            {
+                stk.push(init(a)*(-1));
+            }
+            else if(!flag && status == 3)
+            {
+                stk.push(tmp*init(a));
+            }
+            else if(!flag && status == 4)
+            {
+                stk.push(tmp/init(a));
+            }
+            else if(flag && status == 1)
+            {
+                stk.push(add(a));
+                flag = false;
+            }
+            else if(flag && status == 2)
+            {
+                stk.push(add(a)*(-1));
+                flag = false;
+            }
+            else if(flag && status == 3)
+            {
+                stk.push(tmp*add(a));
+                flag = false;
+            }
+            else if(flag && status == 4)
+            {
+                stk.push(tmp/add(a));
+                flag = false;
+            }
+        }
+        else
+        {
+            if(s[a] == '+')
+            {
+                status = 1;
+                a++;
+            }
+            else if(s[a] == '-')
+            {
+                status = 2;
+                a++;
+            }
+            else if(s[a] == '*')
+            {
+                tmp = stk.top();
+                stk.pop();
+                status = 3;
+                a++;
+            }
+            else if(s[a] == '/')
+            {
+                tmp = stk.top();
+                stk.pop();
+                status = 4;
+                a++;
+            }
+            else if(s[a] == '(')
+            {
+                flag = true;
+                a++;
+            }
+            else if(s[a] == ')')
+            {
+                a++;
+                break;
+            }
+        }
+    }
+    while(!stk.empty())
+    {
+        int t = stk.top();
+        stk.pop();
+        r += t;
+    }
+    return r;
+}
+
+int main()
+{
+    scanf("%s", s);
+    len = strlen(s);
+    int a = 0;
+    printf("%d\n", add(a));
+    return 0;
+}

@@ -1,0 +1,16 @@
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner scan = new Scanner(System.in);
+		while(scan.hasNext()){
+			String str = scan.nextLine();
+			//(?i)是正则表达式中表示不区分大小写的意思
+			str = str.replaceAll("(?i)marshtomp","fjxmlhx" );   
+			System.out.print(str);
+			System.out.println();
+		}
+	}
+}

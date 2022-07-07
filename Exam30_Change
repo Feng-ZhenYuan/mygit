@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static int digui(int a,int b) {
+        if(a<b)//当剩下的队列中五毛的比1元的少，则无法达到要求
+            return 0;
+        if(b==0)//没有一元的，因为前面的a<b的限定条件五毛的一定比一元的少，即也没有五毛的了
+            return 1;
+        else
+            return digui(a-1,b)+digui(a,b-1);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int a = scanner.nextInt();
+        int b = scanner.nextInt();
+        System.out.println(digui(a,b));
+    }
+
+}

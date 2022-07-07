@@ -1,0 +1,68 @@
+#include<cstdio>
+#include<stack>
+#include<string>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+const int maxn = 100000 + 5;
+
+int n;
+long long h[maxn];
+long long le[maxn],ri[maxn];
+stack<int>head;
+stack<int>tail;
+
+void init()
+{
+    while(!head.empty()) head.pop();
+    while(!tail.empty()) tail.pop();
+    memset(le,0,sizeof(le));
+    memset(ri,0,sizeof(ri));
+}
+
+void input()
+{
+    for(int i=1; i<=n; i++)
+        scanf("%lld",&h[i]);
+}
+
+long long work()
+{
+    for(int i=1; i<=n; i++)
+    {
+        while(!head.empty()&&h[head.top()]>=h[i]) head.pop();
+        if(head.empty()) le[i]=1;
+        else le[i]=head.top()+1;
+        head.push(i);
+    }
+    for(int i=n; i>=1; i--)
+    {
+        while(!tail.empty()&&h[tail.top()]>=h[i]) tail.pop();
+        if(tail.empty()) ri[i]=n;
+        else ri[i]=tail.top()-1;
+        tail.push(i);
+    }
+    long long res=-1;
+    for(int i=1; i<=n; i++)
+    {
+        res=max(res,h[i]*(ri[i]-le[i]+1));
+    }
+    return res;
+}
+
+void solve()
+{
+    printf("%lld\n",work());
+}
+
+int main()
+{
+    while(~scanf("%d",&n)&&n)
+    {
+        init();
+        input();
+        solve();
+    }
+    return 0;
+}

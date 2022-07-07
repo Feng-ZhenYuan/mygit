@@ -1,0 +1,25 @@
+import java.util.Scanner;
+
+public class Main {
+	static int sum=0;
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		 f(n,0);
+		 System.out.println(sum);
+		 sc.close();
+		
+	}
+
+	static void f(int i,int s) {
+		if(i<0) return;
+		if(i==0&&s%2==0){
+			sum++;
+			return;
+		}
+		f(i-1,s+1);
+		f(i-2,s+1);
+	}
+
+
+}

@@ -1,0 +1,36 @@
+import java.util.*;
+public class Main {  
+    public static void main(String args[]) {
+        int n;
+        int[] m=new int[26];
+        int[] t=new int[26];
+        String a=new String();
+        char[][] b=new char[1005][105];
+        String[] ans=new String[1005];
+        Scanner in=new Scanner(System.in);
+        n=in.nextInt();
+        a=in.next();
+        for(int i=0;i<a.length();i++) {
+            m[i]=a.charAt(i)-'a';
+            t[a.charAt(i)-'a']=i;
+        }
+        if(n>=0&&n<=1000)
+        for(int i=0;i<n;i++) {
+            a=in.next();
+            b[i]=a.toCharArray();
+            for(int j=0;j<b[i].length;j++) {
+                b[i][j]=(char)(t[b[i][j]-'a']+'a');
+            }
+            ans[i]=String.valueOf(b[i]);
+        }
+        Arrays.sort(ans,0,n);
+        if(n>=0&&n<=1000)
+        for(int i=0;i<n;i++) {
+            b[i]=ans[i].toCharArray();
+            for(int j=0;j<b[i].length;j++) {
+                b[i][j]=(char)(m[b[i][j]-'a']+'a');
+            }
+            System.out.println(b[i]);
+        }
+    }
+}

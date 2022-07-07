@@ -1,0 +1,93 @@
+import java.util.Scanner;
+
+//尺取法的应用
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		String S = in.nextLine();
+		
+		System.out.println(match(S));
+	}
+	
+	public static int match(String s) {
+		int len = s.length();
+		if(len < 4)
+			return -1;
+		char[] words = s.toCharArray();	//将其转化为数组
+		
+		int i = 0;
+		int j = -1;
+		int min = Integer.MAX_VALUE;	//记录长度最小值
+		while(i < len) {
+			//若words[i]是h i o 中的一个
+			if(contain(words[i])) {
+				
+				if(j == -1)	//j的第一次定位
+					j = i + 1;
+				
+				while(j < len) {
+					//若words[j]属于三种字符之一，且i~j全部包含三种字符
+					if(contain(words[j]) && containAll(words, i, j) ) {
+						if(check(words,i,j) && (j - i + 1) < min) {	//更新min
+							min = j - i + 1;
+						}
+						break;
+					}
+					j++;	//若words[j]不是三种字符之一，或 i~j没有包含三种字符,则继续扫描字符串
+				}
+			} 
+			i++;
+		}
+		return min == Integer.MAX_VALUE ? -1 : min;
+		
+	}
+	//判断i~j位置是否只含两个h  一个i  一个o
+	public static boolean check(char[] words,int i, int j) {
+		int c1 = 0, c2 = 0, c3 = 0;
+		
+		for(int p = i; p <= j; p++)
+		{
+			if(words[p]=='h')
+				c1++;
+			else if(words[p] == 'i')
+				c2++;
+			else if(words[p] == 'o')
+				c3++;
+		}
+		
+		return (c1 == 2) && (c2 == 1) && (c3 == 1);
+	}
+	
+	/**
+	 * 判断ch是否是h i o 中的一个
+	 * @param ch
+	 * @return
+	 */
+	public static boolean contain(char ch) {
+		return ch == 'h' || ch == 'i' || ch == 'o';
+	}
+	/**
+	 * 判断在words数组中区间[i,j]的元素中是否全部包含h i o三种字符
+	 * @param words
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	public static boolean containAll(char[] words,int i, int j) {
+		if(j - i + 1 < 4)
+			return false;
+		int c1 = 0, c2 = 0, c3 = 0;
+		while(i <= j) {
+			if(words[i] == 'h')
+				c1++;
+			else if(words[i] == 'i')
+				c2++;
+			else if(words[i] == 'o')
+				c3++;
+			i++;
+		}
+		
+		return (c1 >= 2) && (c2 >= 1) && (c3 >= 1);
+	}
+}

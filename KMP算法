@@ -1,0 +1,66 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int N = in.nextInt();
+		int[] res = new int[N];
+		for(int i = 0; i < N; i++) {
+			String p = in.next();
+			String s = in.next();
+			res[i] = match(s,p);
+		}
+		
+		for(int i = 0; i < res.length; i++)
+			System.out.println(res[i]);
+	}
+	//KMP算法
+	public static int match(String s, String p) {
+		int sLen = s.length();
+		int pLen = p.length();
+		int count = 0;	//统计匹配成功的次数
+		if(sLen < pLen || sLen == 0 || pLen == 0)
+			return -1;
+		int[] next = new int[pLen];
+		next = next(p);	//获取next数组
+		
+		int i = 0;	//指向s的指针
+		int j = 0;	//指向p的指针
+		while(i < sLen) {
+			if(j < 0 || s.charAt(i) == p.charAt(j)) {
+				i++;
+				j++;
+			} else {
+				j = next[j];	//回溯
+			}
+			if(j == pLen) {	//若匹配成功
+				count++;
+				i--;
+				j = next[j-1];
+			}
+		}
+		return count;
+	}
+	
+	public static int[] next(String ps) {
+		int pLen = ps.length();
+		char[] p = ps.toCharArray();	//化成数组
+		int[] next = new int[pLen];
+		next[0] = -1;
+		if(pLen == 1)
+			return next;
+		next[1] = 0;
+		int j = 1;
+		int k = next[j];	//看看位置j的最长匹配前缀在哪
+		while(j < pLen - 1) {
+			//若k<0或者p[k]==p[j]，则可以推出next[j+1]的值，即位置为j+1的最长匹配前缀是k+1
+			if(k < 0 || p[k] == p[j]) { 
+				next[++j] = ++k;
+			} else {
+				k = next[k];
+			}
+		}
+		return next;
+	}
+}

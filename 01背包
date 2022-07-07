@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+         Scanner sc = new Scanner(System.in);
+         int N = sc.nextInt();int M = sc.nextInt();
+         Goods arr[] = new Goods[N];
+         for(int i = 0; i< N; i++)
+             arr[i] = new Goods(sc.nextInt(),sc.nextInt());
+         //dp[N][M];在拥有M张奖券的情况下,面对前N件奖品,最大的喜爱值
+        int dp[][] = new int[N+1][M+1];
+        //初始化,0张奖券时,喜爱值只能为0;
+        for(int i = 0; i< N; i++)
+            for(int j = 0; j<= M; j++) {
+                if(arr[i].need>j) dp[i+1][j] = dp[i][j];
+                else dp[i+1][j] = Math.max(dp[i][j], dp[i][j-arr[i].need] + arr[i].value);
+            }
+        System.out.println(dp[N][M]);
+    }
+    static class Goods{
+        int need;
+        int value;
+        public Goods(int need, int value) {
+            this.need = need;
+            this.value = value;
+        }
+    }
+}

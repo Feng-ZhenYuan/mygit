@@ -1,0 +1,85 @@
+
+import java.util.Scanner;
+
+/**
+	 * 描述
+	 * 	给定一个正整数数组，请求出自第一个元素开始到每个元素为终点的中位数。
+	 *	
+	 *	思路：中位数即为大小在中等位置的数，所以我们只需按照第k小的数字的思路来求即可
+	 */
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int N = in.nextInt();
+		int[] arr = new int[N];
+		for(int i = 0; i < arr.length; i++)
+			arr[i] = in.nextInt();
+		int[] helper = new int[N];
+		for(int i = 0; i < arr.length; i++) {
+			for(int j = i;j >= 0;j--)
+				helper[j] = arr[j];
+			System.out.print(findMidNum(helper,0,i) + " ");
+		}
+			
+	}
+	/**
+	 * 找到arr数字从left到right区间中的中位数，并返回该数字的值
+	 * @param arr
+	 * @param left
+	 * @param right
+	 * @return	返回该数字的值
+	 */
+	public static int findMidNum(int[] arr,int left,int right) {
+		int mid = (left + right) / 2 + 1;
+		int res = findK(arr,left,right,mid);
+		return arr[res];
+	}
+	/**
+	 * 找到第k小的数字，并返回其位置
+	 * @param arr
+	 * @param left
+	 * @param right
+	 * @param k
+	 * @return
+	 */
+	public static int findK(int[] arr,int left,int right,int k) {
+		int index = partition(arr,left,right);	//记录轴值的位置
+		int q = index - left + 1;	//求出轴值是第q小的元素
+		if(q == k)	return q-1+left;	//注意这里是q-1+left!!!
+		else if(q > k)	//若轴值位置大于k,说明第k个数字在轴值左侧
+			return findK(arr,left,index-1,k);
+		else	//若轴值位置小与k，说明第k个数字在轴值右侧
+			return findK(arr,index+1,right,k-q);
+			
+	}
+	/**
+	 * 以arr[low]为轴值，进行归并操作，使arr[low]左侧都是比它小，右侧都是比它大的数
+	 * @param arr
+	 * @param low	
+	 * @param high
+	 * @return	返回轴值最终的位置
+	 */
+	public static int partition(int[] arr,int low,int high) {
+		int i = low;
+		int j = high;
+		while(i<j) {
+			while(i<j && arr[i]<=arr[j])	j--;	//右侧扫描
+			if(i<j) {
+				int temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+				i++;
+			}
+			
+			while(i<j && arr[i]<=arr[j])	i++;	//左侧扫描
+			if(i<j) {
+				int temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+				j--;
+			}
+		}
+		return i;
+	}
+}

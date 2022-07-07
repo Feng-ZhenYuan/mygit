@@ -1,0 +1,60 @@
+	/**
+	 * 描述
+		数组小和的定义如下：
+		
+		例如：数组s = [1, 3, 5, 2, 4, 6]，在s[1]的左边小于或等于s[1]的数的和为1，在s[2]的左边小于或等于s[2]的数有1和3，求和为4，……，将所有位置的左边比它小或者等于的数的和相加起来就是真个数组的小和。
+		
+		给定一个数组，输出数组的小和。
+	 */
+import java.util.Scanner;
+
+public class Main {
+
+	public static int sum = 0;
+	public static int[] helper;
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int N = in.nextInt();
+		int[] arr = new int[N];
+		helper = new int[arr.length];
+		for(int i = 0; i < N; i++)
+			arr[i] = in.nextInt();
+		
+		mergeSort(arr,0,arr.length-1);
+
+		System.out.println(sum);
+	}
+	
+	public static void merge(int[] arr,int low,int mid,int high) {
+		//将arr中元素赋值到helper中
+		for(int i = low; i <=high;i++)
+			helper[i] = arr[i];
+		
+		int left = low,right = mid+1;
+		int current = low;
+		while(left<=mid && right<=high) {
+			if(helper[left]<=helper[right]) {	//注意这里一定要有等号
+				arr[current++] = helper[right++];
+				//若helper[left]<helper[right]则说明，左半侧元素都小与right处的元素,需要全部加入和中
+				for(int i = left; i <= mid; i++)
+					sum+=helper[i];
+			} else {
+				arr[current++] = helper[left++];
+			}
+		}
+		while(left<=mid) {	//若还有剩余的左侧元素，则再次保存
+			arr[current++] = helper[left++];
+		}
+	}
+	
+	public static void mergeSort(int[] arr,int low,int high) {
+		if(low<high) {
+			int mid = (low + high) / 2;
+			mergeSort(arr,low,mid);	//求解子问题1，归并排序前半个子序列
+			mergeSort(arr,mid+1,high);	//求解子问题2，归并排序后半个子序列
+			merge(arr,low,mid,high);	//合并两个有序子序列
+			
+		}
+	}
+
+}

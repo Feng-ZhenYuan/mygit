@@ -1,0 +1,57 @@
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+int a[200010],top=-1;
+int vis[200010];
+
+
+void push(int t)
+{
+    a[++top]=t;
+}
+
+int pop()
+{
+    if(top>0) 
+        vis[top-1]+=vis[top];
+    int ans=a[top]+vis[top];
+    vis[top]=0;
+    top--;
+    return ans;
+}
+
+void inc(int k,int x)
+{
+    vis[k-1]+=x;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    memset(vis,0,sizeof(vis));
+    string str;
+    for(int i=0; i<n; i++)
+    {
+        cin>>str;
+        if(str=="push")
+        {
+            int t;
+            cin>>t;
+            push(t);
+        }
+        else if(str=="pop")
+        {
+            cout<<pop()<<endl;
+        }
+        else if(str=="inc")
+        {
+            int t1,t2;
+            cin>>t1>>t2;
+            inc(t1,t2);
+        }
+    }
+    return 0;
+}

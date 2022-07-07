@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class Main {
+    public int countSum(int n) {
+        // write code here
+        if(n==1 || n==2 || n==3)
+            return n;
+        //n>3
+        int exp=n-3;
+        long[][] base=new long[3][3];
+        base[0][0]=1;base[0][1]=0;base[0][2]=1;
+        base[1][0]=1;base[1][1]=0;base[1][2]=0;
+        base[2][0]=0;base[2][1]=1;base[2][2]=0;
+ 
+        long[][] ret=new long[3][3];//单位矩阵E
+        ret[0][0]=1;
+        ret[1][1]=1;
+        ret[2][2]=1;
+ 
+        long[][] tmp;
+        while (exp>0){
+            if((exp&1)>0){
+                ret=matrixMul(ret,base);
+            }
+            base=matrixMul(base,base);
+            exp=exp>>1;
+        }
+ 
+
+        int res=(int)(ret[0][0]*3%1000000007);
+        res+=(int)(ret[0][1]*2)%1000000007;
+        res%=1000000007;
+        res+=(int)(ret[0][2])%1000000007;
+        return res%1000000007;
+    }
+
+    private static long[][] matrixMul(long[][] a,long[][] b){
+        long[][] res=new long[a.length][b.length];
+        for(int i=0;i<a.length;i++){
+            for(int j=0;j<b[0].length;j++){
+                for(int k=0;k<a[0].length;k++){
+                    res[i][j]+=a[i][k]*b[k][j];
+                    if(res[i][j]>=1000000007)
+                        res[i][j]%=1000000007;
+                }
+            }
+        }
+        return res;
+    }
+ 
+ 
+    public static void main(String[] args) {
+        Main cows=new Main();
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        System.out.print(cows.countSum(n));
+    }
+}

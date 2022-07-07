@@ -1,0 +1,48 @@
+#include<cstdio>
+#include<cstring>
+#include<stack>
+#include<algorithm>
+using namespace std;
+int s1[1010],s2[1010];
+int main()
+{
+	stack<int>Q;
+	for(int i=1; i<=5; i++)
+		{
+			scanf("%d",&s1[i]);
+		}
+	for(int i=1; i<=5; i++)
+		{
+			scanf("%d",&s2[i]);
+		}
+	int a=1,b=1,flag=1,n=5;
+	while(b<=n)
+		{
+			if(a==s2[b])
+				{
+					a++;
+					b++;
+				}
+			else if(!Q.empty()&&Q.top()==s2[b])
+				{
+					Q.pop();
+					b++;
+				}
+			else if(a<=n)
+				{
+					Q.push(a++);
+				}
+			else
+				{
+					flag=0;
+					break;
+				}
+		}
+	if(flag)
+		printf("True\n");
+	else
+		{
+			printf("False\n");
+		}
+	return 0;
+}

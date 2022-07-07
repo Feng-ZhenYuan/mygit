@@ -1,0 +1,72 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<string>
+#include<cstdio>
+#include<cmath>
+#include<set>
+#include<map>
+using namespace std;
+#define ll long long
+#define inf 0x3f3f3f3f
+#define mem(a,b) memset(a,b,sizeof(a))
+#define closeio std::ios::sync_with_stdio(false)
+ 
+map<string,string>fa;
+set<string>q;
+ 
+int main()
+{
+	int t,n,i,len;
+	string s1,s2,x1,x2;
+	closeio;
+	while(cin>>t)
+	{
+		fa.clear();
+		while(t--)
+		{
+			cin>>s1>>s2;
+			fa[s2]=s1;
+		} 
+		cin>>n;
+		while(n--)
+		{
+			cin>>x1>>x2;
+			q.clear();
+			while(fa.find(x1)!=fa.end())
+			{
+				q.insert(x1);
+				x1=fa[x1];
+			}
+			q.insert(x1);
+			len=q.size();
+			int flag=0;
+			q.insert(x2);   
+			if(len==q.size())    //插入x2后set大小不变，说明x2就是x1的祖先
+			{
+				cout<<x2<<endl;
+				flag=1;
+			}
+			else
+			{
+				len=q.size();
+				while(fa.find(x2)!=fa.end())    //x2不为祖先时，向上查询其祖先直到与x1有共同祖先
+				{
+					x2=fa[x2];
+					q.insert(x2);
+					if(len==q.size())
+					{
+						cout<<x2<<endl;
+						flag=1;
+						break;
+					}
+					else
+						len=q.size();
+				}
+			}
+			if(!flag)
+				cout<<"-1"<<endl;
+		}
+	}
+	return 0;
+}
